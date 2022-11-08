@@ -1,0 +1,30 @@
+[
+    {
+        "id": "4E6EE297-D975-4F90-A7F2-B5F848D17214",
+        "ring": {
+            "id": "94D3DCDB-9AF3-4F07-B2A9-591629457FCC"
+        },
+        "name": "WordPress",
+    },
+    {
+        "id": "608CD338-B2CE-4FF8-B271-3445D652E868",
+        "ring": {
+            "id": "DD7DCC97-C61D-4AB9-B80E-7C87CFE66831"
+        },
+        "name": "Swift",
+    },
+    {
+        "id": "5E524F9E-6039-4E24-A976-FFA657C5E2CD",
+        "ring": {
+            "id": "DD7DCC97-C61D-4AB9-B80E-7C87CFE66831"
+        },
+        "name": "Kotlin",
+    },
+    {
+        "id": "3B2C1571-44FC-42A1-82EC-58280B7CF33F",
+        "ring": {
+            "id": "DD7DCC97-C61D-4AB9-B80E-7C87CFE66831"
+        },
+        "name": "TypeScript",
+    }
+]
