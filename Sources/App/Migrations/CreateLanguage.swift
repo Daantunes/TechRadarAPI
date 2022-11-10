@@ -6,7 +6,7 @@ struct CreateLanguage: Migration {
       .id()
       .field("name", .string, .required)
 //      .field("iconURL", .string, .required)
-      .field("ringID", .uuid, .required, .references("rings", "id"))
+      .field("ringID", .uuid, .required, .references("rings", "id", onDelete: .cascade))
       .create()
   }
 

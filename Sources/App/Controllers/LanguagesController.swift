@@ -4,7 +4,7 @@ struct LanguagesController: RouteCollection {
   func boot(routes: RoutesBuilder) throws {
     let languagesRoutes = routes.grouped("api", "languages")
     languagesRoutes.get(use: getAllHandler)
-    languagesRoutes.get(":languagesID", use: getHandler)
+    languagesRoutes.get(":languageID", use: getHandler)
 
     let tokenAuthMiddleware = Token.authenticator()
     let guardAuthMiddleware = User.guardMiddleware()
@@ -13,8 +13,8 @@ struct LanguagesController: RouteCollection {
       guardAuthMiddleware)
 
     protected.post(use: createHandler)
-    protected.put(":languagesID", use: updateHandler)
-    protected.delete(":languagesID", use: deleteHandler)
+    protected.put(":languageID", use: updateHandler)
+    protected.delete(":languageID", use: deleteHandler)
   }
 
   func getAllHandler(_ req: Request) throws -> EventLoopFuture<[Language]> {

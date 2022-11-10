@@ -5,6 +5,7 @@ struct RingsController: RouteCollection {
     let ringsRoutes = routes.grouped("api", "rings")
     ringsRoutes.get(use: getAllHandler)
     ringsRoutes.get(":ringID", use: getHandler)
+    ringsRoutes.get(":ringID", "languages", use: getLanguagesHendler)
 
     let tokenAuthMiddleware = Token.authenticator()
     let guardAuthMiddleware = User.guardMiddleware()
@@ -13,7 +14,7 @@ struct RingsController: RouteCollection {
       guardAuthMiddleware)
 
     protected.post(use: createHandler)
-    protected.post(":ringID", use: updateHandler)
+    protected.put(":ringID", use: updateHandler)
     protected.delete(":ringID", use: deleteHandler)
   }
 
@@ -50,6 +51,14 @@ struct RingsController: RouteCollection {
       .unwrap(or: Abort(.notFound))
       .flatMap { ring in
         ring.delete(on: req.db).transform(to: .noContent)
+      }
+  }
+
+  func getLanguagesHendler(_ req: Request) throws -> EventLoopFuture<[Language]> {
+    Ring.find(req.parameters.get("ringID"), on: req.db)
+      .unwrap(or: Abort(.notFound))
+      .flatMap { ring in
+        ring.$languages.get(on: req.db)
       }
   }
 }
