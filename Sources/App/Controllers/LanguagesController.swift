@@ -1,10 +1,12 @@
 import Vapor
+import Fluent
 
 struct LanguagesController: RouteCollection {
   func boot(routes: RoutesBuilder) throws {
     let languagesRoutes = routes.grouped("api", "languages")
     languagesRoutes.get(use: getAllHandler)
     languagesRoutes.get(":languageID", use: getHandler)
+    languagesRoutes.get("search", use: searchHandler)
 
     let tokenAuthMiddleware = Token.authenticator()
     let guardAuthMiddleware = User.guardMiddleware()
@@ -52,5 +54,14 @@ struct LanguagesController: RouteCollection {
       .flatMap { language in
         language.delete(on: req.db).transform(to: .noContent)
       }
+  }
+
+  func searchHandler(_ req: Request) throws -> EventLoopFuture<[Language]> {
+    guard let searchTerm = req.query[String.self, at: "term"] else {
+      throw Abort(.badRequest)
+    }
+    return Language.query(on: req.db)
+      .filter(\.$name, .custom("~*"), searchTerm)
+      .all()
   }
 }
