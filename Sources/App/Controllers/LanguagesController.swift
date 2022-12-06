@@ -7,6 +7,7 @@ struct LanguagesController: RouteCollection {
     languagesRoutes.get(use: getAllHandler)
     languagesRoutes.get(":languageID", use: getHandler)
     languagesRoutes.get("search", use: searchHandler)
+    languagesRoutes.get(":languageID", "ring", use: getRingHandler)
 
     let tokenAuthMiddleware = Token.authenticator()
     let guardAuthMiddleware = User.guardMiddleware()
@@ -63,5 +64,13 @@ struct LanguagesController: RouteCollection {
     return Language.query(on: req.db)
       .filter(\.$name, .custom("~*"), searchTerm)
       .all()
+  }
+
+  func getRingHandler(_ req: Request) throws -> EventLoopFuture<Ring> {
+    Language.find(req.parameters.get("languageID"), on: req.db)
+      .unwrap(or: Abort(.notFound))
+      .flatMap { language in
+        language.$ring.get(on: req.db)
+      }
   }
 }
